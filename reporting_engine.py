@@ -24,3 +24,35 @@ def load(path):
         return {}                            
       # It then returns an empty dict so we can continue
 
+def collect(discovery, internal):            
+  # this turns both inputs into one simple list of findings
+    findings = []                            
+  # this starts it with an empty list
+
+    for host in discovery.get("hosts", []):  
+      # this loops over each discovered host
+        for svc in host.get("services", []): 
+          # this loops over each service on that host
+            findings.append(                 
+              # this adds a finding describing the service
+                f"{svc.get('tool','AI service')} on {host.get('ip','?')}:{svc.get('port','?')} "
+                f"(auth: {svc.get('authenticated','unknown')})")  
+          # format of tool, address, and auth state
+
+    for f in internal.get("model_files", []):  
+      # this loops over local AI model files
+        findings.append(f"Model file: {f.get('path','?')}")  
+      # this adds a finding for the file path
+
+    for p in internal.get("processes", []):     
+      # this loops over AI-related processes
+        findings.append(f"AI process: {p.get('name','?')}")  
+      # this adds a finding for the process name
+
+    for k in internal.get("api_keys", []):       
+      # this loops over possible API keys on disk
+        findings.append(f"Possible API key in: {k.get('path','?')}")  
+      # this adds a finding (path only, no secret)
+
+    return findings                          
+  # this returns the full list of finding strings
