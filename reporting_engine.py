@@ -82,3 +82,32 @@ def score(text):
       # if the AI call fails...
         return f"INFO - (AI unavailable: {e})"  
       # ...fall back to a plain INFO line
+
+def main():                                  
+  # run the whole reporting engine
+    discovery = load("discovery_results.json")  
+  # load the discovery module's output
+    internal = load("internal_results.json")   
+  # load the internal scan module's output
+    findings = collect(discovery, internal)     
+  # merge both into one list of findings
+
+    report = []                              
+  # collect the scored lines for the report
+    for f in findings:                       
+      # loop over each finding
+        report.append(f"- {f}\n  {score(f)}")  
+      # score it with the AI and format the line
+
+    text = "SHADOW AI SCAN REPORT\n\n" + "\n\n".join(report)  
+  # build the full report text
+    open("report.txt", "w").write(text)      
+  # write the human-readable report to a file
+    print(text)                              
+  # also print it to the screen
+
+
+if __name__ == "__main__":                   
+  # if this file is run directly...
+    main()                                   
+# ...start the program
