@@ -56,3 +56,29 @@ def collect(discovery, internal):
 
     return findings                          
   # this returns the full list of finding strings
+
+
+def score(text):                             
+  # ask the AI to rate one finding
+    prompt = (f"Rate this shadow-AI finding's severity (CRITICAL/HIGH/MEDIUM/LOW/INFO) "
+              f"and explain briefly in one sentence: {text}")  # the question we send the AI
+    try:                                     
+      # try the network call
+        r = requests.post(                   
+          # send the request to the AI server
+            AI_URL,                          
+          # the endpoint URL
+            headers={"Authorization": f"Bearer {AI_KEY}"},  
+          # pass the API key
+            json={"model": "gpt-oss",        
+                  # which model to use
+                  "messages": [{"role": "user", "content": prompt}]},  
+          # the prompt
+            timeout=30)                      
+      # give up after 30 seconds
+        return r.json()["choices"][0]["message"]["content"]  
+      # return the AI's text reply
+    except Exception as e:                   
+      # if the AI call fails...
+        return f"INFO - (AI unavailable: {e})"  
+      # ...fall back to a plain INFO line
