@@ -5,6 +5,8 @@ import sys
 # this prints warnings to stderr
 import requests   
 # this sends HTTP requests to the AI server
+from NetworkScanner.scanner import ShadowScan
+#The network scanner (the Discovery module)
 
 AI_URL = "http://sushi.it.ilstu.edu:8080/v1/chat/completions"  
 # This is the AI endpoint to call
@@ -29,16 +31,16 @@ def collect(discovery, internal):
     findings = []                            
   # this starts it with an empty list
 
-    for host in discovery.get("hosts", []):  
-      # this loops over each discovered host
-        for svc in host.get("services", []): 
-          # this loops over each service on that host
+    for ip, host in discovery.items():  
+      # This loops over each discovered host (The scanner's keys results by IP)
+        for ep in host.get("detected_endpoints", []): 
+          # This loops over each AI endpoint found on that host
             findings.append(                 
               # this adds a finding describing the service
-                f"{svc.get('tool','AI service')} on {host.get('ip','?')}:{svc.get('port','?')} "
-                f"(auth: {svc.get('authenticated','unknown')})")  
-          # format of tool, address, and auth state
-
+               f"{ep.get('probable_service','AI service')} on {ip}:{ep.get('port','?')} "
+               f"({ep.get('verification','Unverified Service')})")  
+                  # service name, address, and whether the scanner verified it
+               
     for f in internal.get("model_files", []):  
       # this loops over local AI model files
         findings.append(f"Model file: {f.get('path','?')}")  
@@ -84,13 +86,15 @@ def score(text):
       # ...fall back to a plain INFO line
 
 def main():                                  
-  # run the whole reporting engine
-    discovery = load("discovery_results.json")  
-  # load the discovery module's output
+  # runs the whole reporting engine
+    target = sys.argv[1] if len(sys.argv) > 1 else "127.0.0.1"
+  # IP or subnet to scan, e.g. 10.0.0.0/24 (defaults to this machine)
+    discovery = ShadowScan().scan_target(target)  
+  # this runs the scanner and get its results directly    
     internal = load("internal_results.json")   
-  # load the internal scan module's output
+  # this loads the internal scan module's output
     findings = collect(discovery, internal)     
-  # merge both into one list of findings
+  # this merges both into one list of findings
 
     report = []                              
   # collect the scored lines for the report
