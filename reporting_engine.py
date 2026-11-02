@@ -10,7 +10,7 @@ from NetworkScanner.scanner import ShadowScan
 
 AI_URL = "http://sushi.it.ilstu.edu:8080/v1/chat/completions"  
 # This is the AI endpoint to call
-AI_KEY = "PUT-YOUR-KEY-HERE"                                    
+AI_KEY = sk-d37203f16fcc4702b4455f4a74701d8d                                   
 # this is where we will eventually input our API key (*****replace this before testing*****)
 
 
