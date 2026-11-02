@@ -1,4 +1,3 @@
-
 import json       
 # this reads and writes JSON files
 import sys        
@@ -43,10 +42,10 @@ def collect(discovery, internal):
                f"({ep.get('verification','Unverified Service')})")  
                   # service name, address, and whether the scanner verified it
                
-         for f in internal.get("findings", []):
-          # loop over every finding the internal scanner reported
-          findings.append(f"[{f.get('severity','info').upper()}] {f.get('description','')} {f.get('path','')}")
-          # severity, what was found, and where
+    for f in internal.get("findings", []):
+        # loop over every finding the internal scanner reported
+        findings.append(f"[{f.get('severity','info').upper()}] {f.get('description','')} {f.get('path','')}")
+       # severity, what was found, and where
 
     return findings                          
   # this returns the full list of finding strings
