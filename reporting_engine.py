@@ -43,20 +43,10 @@ def collect(discovery, internal):
                f"({ep.get('verification','Unverified Service')})")  
                   # service name, address, and whether the scanner verified it
                
-    for f in internal.get("model_files", []):  
-      # this loops over local AI model files
-        findings.append(f"Model file: {f.get('path','?')}")  
-      # this adds a finding for the file path
-
-    for p in internal.get("processes", []):     
-      # this loops over AI-related processes
-        findings.append(f"AI process: {p.get('name','?')}")  
-      # this adds a finding for the process name
-
-    for k in internal.get("api_keys", []):       
-      # this loops over possible API keys on disk
-        findings.append(f"Possible API key in: {k.get('path','?')}")  
-      # this adds a finding (path only, no secret)
+         for f in internal.get("findings", []):
+          # loop over every finding the internal scanner reported
+          findings.append(f"[{f.get('severity','info').upper()}] {f.get('description','')} {f.get('path','')}")
+          # severity, what was found, and where
 
     return findings                          
   # this returns the full list of finding strings
