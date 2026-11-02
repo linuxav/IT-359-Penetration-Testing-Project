@@ -5,27 +5,44 @@ import requests
 class ShadowScan:
     def __init__(self):
         self.scanner = nmap.PortScanner()
-        self.signatures = { #TODO Add more ports to check
-            11434 : "Ollama API",
-            1234 : "LM Studio API",
-            8000: "vLLM / Open WebUI / FastAPI",
-            8080: "LocalAI / Llama.cpp"
+        self.signatures = {
+            1234 : ("LM Studio API", "/v1/models", None),
+            1337 : ("Jan AI", "/v1/models", None),
+            3000 : ("Open WebUI", "/", "open-webui"),
+            5000 : ("OobaGooba API", "/v1/models", None),
+            5001 : ("KoboldCPP", "/api/v1/model", None),
+            6333 : ("Qdrant Vector DB", "/readyz", "qdrant"),
+            7860 : ("OobaGooba Gradio Web UI / Stable Diffusion", "/", "gradio"),
+            8000 : ("vLLM / Open WebUI / FastAPI", "/v1/models", None),
+            8080 : ("LocalAI / Llama.cpp / Open WebUI", "/v1/models", None),
+            9000 : ("Hugging Face TGI", "/info", "model_id"),
+            10000: ("Moshi Voice-to-Voice AI", "/", "moshi"),
+            10012: ("Bark TTS Engine", "/", "bark"),
+            11434: ("Ollama API", "/", "ollama is running"),
+            19530: ("Milvus Vector DB", "/v1/vector/collections", None)
         }
 
     def verify_endpoint(self, ip: str, port: int) -> str:
             """Verify probable endpoints"""
+            if port not in self.signatures:
+                return "Unverified Service"
+
+            service_name, endpoint, fingerprint = self.signatures[port]
+            url = f"http://{ip}:{port}{endpoint}"
+            
             try:
-                if port == 11434:
-                    # Ollama Verification TODO multiple services checks per port where applicable
-                    response = requests.get(f"http://{ip}:{port}/", timeout=2)
-                    if "Ollama is running" in response.text:
-                        return "Verified Ollama Instance"
+                response = requests.get(url, timeout=2, allow_redirects=True)
+
+                if response.status_code == 200:
+                    if not fingerprint:
+                        return f"{service_name} Verified"
+                    if fingerprint.lower() in response.text.lower():
+                        return f"{service_name} Verified"
+                    
+                elif response.status_code in [401, 403, 405]:
+                    return f"{service_name} Possible (Auth Required / Method Not Allowed)"
     
-                elif port == 1234:
-                    # LM Studio Verification
-                    pass #TODO Add all services
-    
-            except Exception:
+            except requests.exceptions.RequestException:
                 pass 
     
             return "Unverified Service"
@@ -61,6 +78,9 @@ class ShadowScan:
 
                     if port_info.get("state") == "open":
                         verification_status = self.verify_endpoint(host, port)
+
+                        sig_tuple = self.signatures.get(port)
+                        service_name = sig_tuple[0] if sig_tuple else "Unkown AI Port"
 
                         endpoint_details = {
                             "port": port,
