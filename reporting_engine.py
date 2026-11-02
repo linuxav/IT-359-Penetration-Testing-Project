@@ -10,8 +10,10 @@ from NetworkScanner.scanner import ShadowScan
 
 AI_URL = "http://sushi.it.ilstu.edu:8080/v1/chat/completions"  
 # This is the AI endpoint to call
-AI_KEY = sk-d37203f16fcc4702b4455f4a74701d8d                                   
-# this is where we will eventually input our API key (*****replace this before testing*****)
+import os
+# reads environment variables
+AI_KEY = os.environ.get("AI_API_KEY", "")
+# the API key comes from the environment, never from the code
 
 
 def load(path):                              
