@@ -84,7 +84,7 @@ class ShadowScan:
 
                         endpoint_details = {
                             "port": port,
-                            "probable_service": self.signatures.get(port, "Unknown"),
+                            "probable_service": service_name,
                             "verification": verification_status,
                             "name": port_info.get("name", ""),
                             "product": port_info.get("product", ""),
@@ -100,7 +100,7 @@ class ShadowScan:
 # Test ShadowScan against own device (empty dictionary is returned if no suspected ports are open)
 if __name__ == "__main__":
     scanner = ShadowScan()
-    target = "172.0.0.1"
+    target = "127.0.0.1"
     scan_output = scanner.scan_target(target)
 
     print(json.dumps(scan_output, indent=4))
