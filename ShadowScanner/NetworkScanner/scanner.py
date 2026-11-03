@@ -84,7 +84,7 @@ class ShadowScan:
 
                         endpoint_details = {
                             "port": port,
-                            "probable_service": self.signatures.get(port, "Unknown"),
+                            "probable_service": service_name,
                             "verification": verification_status,
                             "name": port_info.get("name", ""),
                             "product": port_info.get("product", ""),
