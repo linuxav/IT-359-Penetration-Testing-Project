@@ -7,7 +7,7 @@ import requests
 from NetworkScanner.scanner import ShadowScan
 #The network scanner (the Discovery module)
 
-AI_URL = "http://sushi.it.ilstu.edu:8080/v1/chat/completions"  
+AI_URL = "http://sushi.it.ilstu.edu:8080/api/chat/completions"
 # This is the AI endpoint to call
 import os
 # reads environment variables
