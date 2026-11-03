@@ -63,7 +63,7 @@ def score(text):
           # the endpoint URL
             headers={"Authorization": f"Bearer {AI_KEY}"},  
           # pass the API key
-            json={"model": "c9afba76-1f3f-43c3-8f49-e0271a94fda0",        
+            json={"model": "llama3.3:latest",        
                   # which model to use
                   "messages": [{"role": "user", "content": prompt}]},  
           # the prompt
