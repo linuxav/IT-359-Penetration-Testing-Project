@@ -7,7 +7,7 @@ import requests
 from NetworkScanner.scanner import ShadowScan
 #The network scanner (the Discovery module)
 
-AI_URL = "http://sushi.it.ilstu.edu:8080/v1/chat/completions"  
+AI_URL = "http://sushi.it.ilstu.edu:8080/api/chat/completions"
 # This is the AI endpoint to call
 import os
 # reads environment variables
@@ -63,7 +63,7 @@ def score(text):
           # the endpoint URL
             headers={"Authorization": f"Bearer {AI_KEY}"},  
           # pass the API key
-            json={"model": "gpt-oss",        
+            json={"model": "llama3.3:latest",        
                   # which model to use
                   "messages": [{"role": "user", "content": prompt}]},  
           # the prompt
