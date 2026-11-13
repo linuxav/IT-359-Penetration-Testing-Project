@@ -2,13 +2,15 @@
 
 ## Dependencies
 
-Sudo apt install nmap requests
+Sudo apt install nmap python3-requests
 
 ## How to Run
 
+git clone <https://github.com/linuxav/IT-359-Penetration-Testing-Project.git>
+
 cd \~/IT-359-Penetration-Testing-Project
 
-read \-s \-p "AI key: " AI\_API\_KEY && export AI\_API\_KEY
+read \-s \-p "AI key: " AI\_API\_KEY && export AI\_API\_KEY # AI API Key prompt
 
 mkdir \-p /tmp/shadow-ai-demo/ollama && : \> /tmp/shadow-ai-demo/ollama/sample.gguf && printf 'DEMO\_API\_KEY=training-only-example\\nauth\_enabled=false\\n' \> /tmp/shadow-ai-demo/ollama/.env && chmod 644 /tmp/shadow-ai-demo/ollama/.env
 

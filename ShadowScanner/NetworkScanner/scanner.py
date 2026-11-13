@@ -101,6 +101,8 @@ class ShadowScan:
 if __name__ == "__main__":
     scanner = ShadowScan()
     target = "127.0.0.1"
+    print("Please enter target: ")
+    input() = target
     scan_output = scanner.scan_target(target)
 
     print(json.dumps(scan_output, indent=4))
